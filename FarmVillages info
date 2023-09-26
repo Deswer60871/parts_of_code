@@ -1,0 +1,67 @@
+function getVillages() {
+    var villages = [];
+    var plunderTable = document.getElementById('plunder_list');
+    var plunderTableLines = plunderTable.childNodes[1].getElementsByTagName('tr');
+    var i;
+    var j = 0;
+    for (i = 2; i < plunderTableLines.length; i++) {
+        if (typeof plunderTableLines[i].attributes.style !== 'undefined') {
+            continue;
+        }
+        var villageId = plunderTableLines[i].id;
+        var plunderLine = plunderTableLines[i].getElementsByTagName('td');
+        var maxLoot = "none";
+        var maxLootImg = plunderLine[2].firstElementChild;
+        if (maxLootImg != null) {
+            if (maxLootImg.getAttribute("src").includes("0.png")) {
+                maxLoot = "partial";
+            } else if (maxLootImg.getAttribute("src").includes("1.png")) {
+                maxLoot = "full";
+            }
+        }
+        var villageWall = plunderLine[6].textContent;
+        var villageDist = plunderLine[7].textContent;
+        var intVillageWall;
+        if (villageWall != "?") {
+            intVillageWall = parseInt(villageWall);
+        } else {
+            intVillageWall = -1;
+        }
+        var lastAttackImg = plunderLine[1].firstElementChild.getAttribute("src");
+        var regex = /\/(\w+)\.\w+$/;
+        var result = regex.exec(lastAttackImg);
+        var lastAttack = result[1];
+        var farmA = plunderTableLines[i].getElementsByClassName("farm_icon_a")[0];
+        var farmB = plunderTableLines[i].getElementsByClassName("farm_icon_b")[0];
+        var farmC = plunderTableLines[i].getElementsByClassName("farm_icon_c")[0];
+        villages[j] = {
+            id: villageId,
+            maxLoot: maxLoot,
+            wall: intVillageWall,
+            distance: parseFloat(villageDist),
+            lastAttack: lastAttack,
+            farmA: {
+                element: farmA,
+                isLocked: checkFarmLocked(farmA)
+            },
+            farmB: {
+                element: farmB,
+                isLocked: checkFarmLocked(farmB)
+            },
+            farmC: {
+                element: farmC,
+                isLocked: checkFarmLocked(farmC)
+            },
+            line: plunderTableLines[i]
+        }
+        j++;
+    }
+    return villages;
+}
+
+function checkFarmLocked(farm){
+    const DISABLED = ".farm_icon_disabled";
+    return farm.matches(DISABLED)
+}
+
+console.log( getVillages());
