@@ -1,8 +1,8 @@
 Created Deswer
 
 var PB_Push_Build = false;
-let pocetMinut = 3;
-let timeLimit = pocetMinut * 60;
+let Minutes = 3;
+let timeLimit = Minutes* 60;
 
 function getCurrentBuildTime() {
     let timeElement = document.querySelector('#buildqueue .lit-item span');
