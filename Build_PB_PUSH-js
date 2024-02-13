@@ -1,0 +1,29 @@
+Created Deswer
+
+var PB_Push_Build = false;
+let pocetMinut = 3;
+let timeLimit = pocetMinut * 60;
+
+function getCurrentBuildTime() {
+    let timeElement = document.querySelector('#buildqueue .lit-item span');
+    if (!timeElement) return null;
+    let timeString = timeElement.textContent;
+    let [hours, minutes, seconds] = timeString.split(':').map(Number);
+    return hours * 3600 + minutes * 60 + seconds;
+}
+
+function clickSpeedUp() {
+    let speedUpButton = document.querySelector('#buildqueue .order_feature.btn.btn-btr');
+    if (speedUpButton && game_data.player.pp >= 10) speedUpButton.click();
+}
+
+function checkAndSpeedUp() {
+    let currentTime = getCurrentBuildTime();
+    if (currentTime && currentTime > timeLimit) {
+        clickSpeedUp();
+    }
+}
+
+if(PB_Push_Build == true){
+    setInterval(checkAndSpeedUp, 5000);
+}
